@@ -4,6 +4,7 @@ import path from 'path'
 import fs from 'fs'
 
 export default defineConfig({
+  preview: {n    host: "0.0.0.0",n    port: 5173,n    allowedHosts: [".railway.app"]n  },
   plugins: [
     react(),
     {
