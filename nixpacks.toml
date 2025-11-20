@@ -1,8 +1,0 @@
-[phases.setup]
-nixpkgs = ["nodejs_23", "npm-10_x"]
-
-[phases.build]
-cmds = ["npm run build"]
-
-[phases.start]
-cmds = ["npx serve -s dist"]
