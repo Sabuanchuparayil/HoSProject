@@ -97,8 +97,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         loyaltyPoints: 0,
         createdAt: new Date().toISOString(),
     };
-    const createdUser = await apiService.addUser(fullUserPayload);
-    setUsers(prev => [...prev, createdUser]);
+     const createdUser = await apiService.addUser(fullUserPayload);
+     setUsers(prev => [...prev, createdUser]);
   };
   
   const deleteUser = async (userId: number) => {
