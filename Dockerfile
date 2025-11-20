@@ -25,3 +25,4 @@ EXPOSE 5173
 
 # Serve the built app
 CMD ["serve", "-s", "dist", "-l", "5173"]
+# CACHE-BUST=1763653034
