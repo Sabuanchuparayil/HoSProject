@@ -1,21 +1,17 @@
 {
   "build": {
     "builder": "NIXPACKS",
-    "nixpacksPlan": {
-      "phases": {
-        "setup": {
-          "nixPkgs": ["nodejs_22"]
-        },
-        "install": {
-          "cmds": ["npm ci"]
-        },
-        "build": {
-          "cmds": ["npm run build"]
-        }
-      }
-    }
+    "buildCommand": "npm run build"
   },
   "deploy": {
-    "startCommand": "npx serve -s dist"
-  }
+    "startCommand": "npx serve -s dist",
+    "healthcheckPath": "/",
+    "healthcheckTimeout": 100
+  },
+  "staticPublishPath": "dist",
+  "ignore": [
+    "node_modules",
+    "duplicates_backup",
+    "clean"
+  ]
 }
