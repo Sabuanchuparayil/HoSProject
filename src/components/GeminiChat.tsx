@@ -109,7 +109,6 @@ export const GeminiChat = () => {
   );
 };
 
-export default GeminiChat;
 import React, { useState } from "react";
 
 export const GeminiChat = () => {
@@ -172,5 +171,4 @@ export const GeminiChat = () => {
   );
 };
 
-export default GeminiChat;
 
