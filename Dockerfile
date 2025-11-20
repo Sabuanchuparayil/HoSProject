@@ -9,21 +9,13 @@ RUN npm install
 COPY . .
 RUN npm run build
 
-# ---------- Production Stage ----------
+# ---------- Serve Stage ----------
 FROM node:22-alpine
 
 WORKDIR /app
-
-# Install a lightweight static server
 RUN npm install -g serve
 
-# Copy built dist folder
-COPY --from=build /app/dist ./dist
+COPY --from=build /app/dist /app/dist
 
-# Expose production port
 EXPOSE 5173
-
-# Serve the built app
-CMD ["serve", "-s", "dist", "-l", "5173"]
-# CACHE-BUST=1763653034
-# FORCE-REDEPLOY-1763658530
+CMD ["serve", "-s", "/app/dist", "-l", "5173"]
