@@ -1,22 +1,8 @@
 {
   "build": {
-    "builder": "nixpacks",
-    "buildCommand": "npm ci && npm run build"
+    "builder": "docker"
   },
   "deploy": {
-    "startCommand": "npx serve -s dist",
-    "restartPolicyType": "never"
-  },
-  "nixpacks": {
-    "phases": {
-      "install": {
-        "cmds": ["npm ci"]
-      },
-      "build": {
-        "cmds": ["npm run build"]
-      }
-    },
-    "providers": ["node"]
+    "numReplicas": 1
   }
 }
-
