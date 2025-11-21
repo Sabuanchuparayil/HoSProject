@@ -1,9 +1,11 @@
+# Force rebuild
+ARG RAILWAY_NOCACHE
+
 # ---------- Build Stage ----------
 FROM node:22-alpine AS build
-WORKDIR /app
+ARG RAILWAY_NOCACHE
 
-# disable Docker caching
-ARG CACHEBUST=1
+WORKDIR /app
 
 COPY package*.json ./
 RUN npm install
@@ -13,8 +15,9 @@ RUN npm run build
 
 # ---------- Serve Stage ----------
 FROM node:22-alpine
-WORKDIR /app
+ARG RAILWAY_NOCACHE
 
+WORKDIR /app
 RUN npm install -g serve
 
 COPY --from=build /app/dist /app/dist
