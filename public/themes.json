@@ -1,8 +1,24 @@
 [
   {
-    "id": "default",
-    "name": "Default Theme",
-    "cssFile": "/default-theme.css",
-    "isCustom": false
+    "id": "light",
+    "name": "Light Theme",
+    "css": {
+      "bg-primary": "#ffffff",
+      "text-primary": "#000000",
+      "bg-secondary": "#f2f2f2",
+      "accent": "#6633ff",
+      "accent-foreground": "#ffffff"
+    }
+  },
+  {
+    "id": "dark",
+    "name": "Dark Theme",
+    "css": {
+      "bg-primary": "#0d0d0d",
+      "text-primary": "#ffffff",
+      "bg-secondary": "#1a1a1a",
+      "accent": "#bb86fc",
+      "accent-foreground": "#000000"
+    }
   }
 ]
