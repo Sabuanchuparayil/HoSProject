@@ -1,9 +1,13 @@
 # ---------- Build Stage ----------
 FROM node:22-alpine AS build
-
 WORKDIR /app
+
+# disable Docker caching
+ARG CACHEBUST=1
+
 COPY package*.json ./
 RUN npm install
+
 COPY . .
 RUN npm run build
 
@@ -15,9 +19,7 @@ RUN npm install -g serve
 
 COPY --from=build /app/dist /app/dist
 
-# Railway exposes PORT environment variable
-ENV PORT=5173
-
-EXPOSE ${PORT}
+ENV PORT=8080
+EXPOSE 8080
 
 CMD ["sh", "-c", "serve -s /app/dist -l $PORT"]
