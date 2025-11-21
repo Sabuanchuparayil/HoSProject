@@ -1,63 +1,74 @@
-// FIXED apiService.ts — mock-only version
+import axios from "axios";
 
-import { 
-  Address, Carrier, HomePageContent, IntegrationSettings, Order, Product, 
-  Promotion, ReturnRequest, Role, Seller, ThemeConfiguration, Transaction, 
-  User, UserAddress, ShippingOption, ProductReview 
-} from '../types';
+import { MOCK_PRODUCTS } from "../data/products";
+import { MOCK_SELLERS } from "../data/sellers";
+import { MOCK_ORDERS } from "../data/orders";
+import { MOCK_USERS } from "../data/users";
+import { MOCK_RETURN_REQUESTS } from "../data/returns";
+import { MOCK_TRANSACTIONS } from "../data/transactions";
+import { MOCK_THEME_CONFIGURATIONS } from "../data/themes";
+import { INITIAL_INTEGRATION_SETTINGS } from "../data/integrations";
+import { MOCK_HOME_PAGE_CONTENT } from "../data/content";
+import { MOCK_REVIEWS } from "../data/reviews";
+import { MOCK_CARRIERS } from "../data/carriers";
+import { MOCK_PROMOTIONS } from "../data/promotions";
+import { MOCK_TRACKING_HISTORY } from "../data/tracking";
 
-import { TaxRates } from '../contexts/FinancialsContext';
+import { ThemeConfiguration } from "../types";
 
-// Import mock DB tables
-import { MOCK_USERS } from '../data/users';
-import { MOCK_ROLES } from '../data/roles';
-import { MOCK_PRODUCTS } from '../data/products';
-import { MOCK_SELLERS } from '../data/sellers';
-import { MOCK_ORDERS } from '../data/orders';
-import { MOCK_RETURN_REQUESTS } from '../data/returns';
-import { MOCK_TRANSACTIONS } from '../data/transactions';
-import { MOCK_THEME_CONFIGURATIONS } from '../data/themes';
-import { INITIAL_INTEGRATION_SETTINGS } from '../data/integrations';
-import { MOCK_HOME_PAGE_CONTENT } from '../data/content';
-import { MOCK_REVIEWS } from '../data/reviews';
-import { MOCK_CARRIERS } from '../data/carriers';
-import { MOCK_PROMOTIONS } from '../data/promotions';
-import { MOCK_TRACKING_HISTORY } from '../data/tracking';
+const BASE_URL =
+  import.meta.env.VITE_API_URL ||
+  "https://hos-backend-production-31dc.up.railway.app";
 
-// LOGGING
-console.log("Using MOCK API service");
+console.log("API Base URL:", BASE_URL);
 
-// Deep copies
-let users = JSON.parse(JSON.stringify(MOCK_USERS));
-let roles = JSON.parse(JSON.stringify(MOCK_ROLES));
-let products = JSON.parse(JSON.stringify(MOCK_PRODUCTS));
-let sellers = JSON.parse(JSON.stringify(MOCK_SELLERS));
-let orders = JSON.parse(JSON.stringify(MOCK_ORDERS));
-let returnRequests = JSON.parse(JSON.stringify(MOCK_RETURN_REQUESTS));
-let transactions = JSON.parse(JSON.stringify(MOCK_TRANSACTIONS));
-let platformThemes = JSON.parse(JSON.stringify(MOCK_THEME_CONFIGURATIONS));
-let integrationSettings = JSON.parse(JSON.stringify(INITIAL_INTEGRATION_SETTINGS));
-let homePageContent = JSON.parse(JSON.stringify(MOCK_HOME_PAGE_CONTENT));
-let reviews = JSON.parse(JSON.stringify(MOCK_REVIEWS));
-let carriers = JSON.parse(JSON.stringify(MOCK_CARRIERS));
-let promotions = JSON.parse(JSON.stringify(MOCK_PROMOTIONS));
-let taxRates: TaxRates = { "GB": 0.20, "US": 0.08, "CA": 0.13 };
+// REAL BACKEND API CLIENT
+const real = axios.create({
+  baseURL: BASE_URL,
+  headers: { "Content-Type": "application/json" },
+});
 
-const mockApi = (data, delay = 200) =>
-  new Promise(resolve => setTimeout(() => resolve(JSON.parse(JSON.stringify(data))), delay));
+// FALLBACK MOCK RESPONSE
+const fallback = <T>(data: T) =>
+  new Promise<T>((resolve) => setTimeout(() => resolve(data), 200));
 
 export const apiService = {
-  fetchProducts: () => mockApi(products),
-  fetchTaxRates: () => mockApi(taxRates),
-  fetchPlatformThemes: () => mockApi(platformThemes),
-  fetchCarriers: () => mockApi(carriers),
-  fetchPromotions: () => mockApi(promotions),
-  fetchUsers: () => mockApi(users),
-  fetchOrders: () => mockApi(orders),
-  fetchReviews: () => mockApi(reviews),
-  fetchHomePageContent: () => mockApi(homePageContent),
-  fetchIntegrationSettings: () => mockApi(integrationSettings),
-  fetchReturnRequests: () => mockApi(returnRequests),
-  fetchSellers: () => mockApi(sellers),
-  fetchRoles: () => mockApi(roles),
+  fetchPlatformThemes: async (): Promise<ThemeConfiguration[]> => {
+    try {
+      const r = await real.get("/platform/themes");
+      return r.data;
+    } catch {
+      console.warn("Themes API failed → using mock themes");
+      return MOCK_THEME_CONFIGURATIONS;
+    }
+  },
+
+  fetchProducts: async () => {
+    try {
+      const r = await real.get("/products");
+      return r.data;
+    } catch {
+      return MOCK_PRODUCTS;
+    }
+  },
+
+  fetchOrders: async () => {
+    try {
+      const r = await real.get("/orders");
+      return r.data;
+    } catch {
+      return fallback(MOCK_ORDERS);
+    }
+  },
+
+  fetchUsers: async () => fallback(MOCK_USERS),
+
+  fetchTaxRates: async () => {
+    try {
+      const r = await real.get("/tax");
+      return r.data;
+    } catch {
+      return { GB: 0.20, US: 0.08, CA: 0.13 };
+    }
+  },
 };
