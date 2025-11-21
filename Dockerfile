@@ -22,3 +22,4 @@ RUN ls -R /app/dist
 EXPOSE 5173
 CMD ["serve", "-s", "/app/dist", "-l", "5173"]
 # DEPLOY-BUST-1763698350
+# BUST-1763700104
