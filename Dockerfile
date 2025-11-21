@@ -1,28 +1,15 @@
-# Force rebuild
-ARG RAILWAY_NOCACHE
-
-# ---------- Build Stage ----------
+# Build stage
 FROM node:22-alpine AS build
-ARG RAILWAY_NOCACHE
-
 WORKDIR /app
-
 COPY package*.json ./
 RUN npm install
-
 COPY . .
 RUN npm run build
 
-# ---------- Serve Stage ----------
+# Serve stage
 FROM node:22-alpine
-ARG RAILWAY_NOCACHE
-
 WORKDIR /app
 RUN npm install -g serve
-
-COPY --from=build /app/dist /app/dist
-
-ENV PORT=8080
+COPY --from=build /app/dist ./dist
 EXPOSE 8080
-
-CMD ["sh", "-c", "serve -s /app/dist -l $PORT"]
+CMD ["serve", "-s", "dist", "-l", "8080"]
